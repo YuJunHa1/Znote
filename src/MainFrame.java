@@ -1,7 +1,12 @@
-
 import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -17,19 +22,45 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
+
+
     public MainFrame() {
+        
+        
+        
         initComponents();
+        jTabbedPane.setUI(new BasicTabbedPaneUI() { 
+	@Override 
+	protected void installDefaults() { 
+		super.installDefaults(); 
+                highlight = new Color(255, 253, 208); 
+		lightHighlight = new Color(255, 253, 208); 
+		shadow = new Color(255, 253, 208); 
+		darkShadow = new Color(255, 253, 208);
+		focus = new Color(255, 253, 208); 
+	}
+        @Override 
+        protected int calculateTabWidth(int tabPlacement, int tabIndex, FontMetrics metrics) { 
+            return 260; // 탭의 가로 크기 설정 
+	} 
+});
         getContentPane().setBackground(new Color(255, 253, 208));
         loginFrame.getContentPane().setBackground(new Color(255, 253, 208));
         joinFrame.getContentPane().setBackground(new Color(255, 253, 208));
         loginFrame.setSize(400, 300);
         joinFrame.setSize(420, 400);
+        loginFrame.setVisible(true);
+        jTabbedPane.setBackground(new Color(255, 253, 208));
+        main_panel.setBackground(new Color(255, 253, 208));
+        zettel_panel.setBackground(new Color(255, 253, 208));
+        my_panel.setBackground(new Color(255, 253, 208));
         customizeTextField(login_tf_id);
         customizeTextField(login_tf_pw);
         customizeTextField(join_tf_id);
         customizeTextField(join_tf_pw);
         customizeTextField(join_tf_pw2);
         customizeTextField(join_tf_name);
+        
     }
     
      private void customizeTextField(JTextField textField) {
@@ -37,6 +68,13 @@ public class MainFrame extends javax.swing.JFrame {
         textField.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK)); // 밑줄
     }
     
+     private void setUnderline(JLabel label, boolean addUnderline) {
+    if (addUnderline) {
+        label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+    } else {
+        label.setBorder(null);
+    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -65,11 +103,10 @@ public class MainFrame extends javax.swing.JFrame {
         join_lbl_pw2 = new javax.swing.JLabel();
         join_lbl_name = new javax.swing.JLabel();
         join_tf_pw = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        jTabbedPane = new javax.swing.JTabbedPane();
+        main_panel = new javax.swing.JPanel();
+        zettel_panel = new javax.swing.JPanel();
+        my_panel = new javax.swing.JPanel();
 
         login_lbl_id.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         login_lbl_id.setText("I D");
@@ -88,9 +125,31 @@ public class MainFrame extends javax.swing.JFrame {
 
         login_lbl_signup.setFont(new java.awt.Font("휴먼편지체", 0, 16)); // NOI18N
         login_lbl_signup.setText("sign up");
+        login_lbl_signup.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                login_lbl_signupMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                login_lbl_signupMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                login_lbl_signupMouseExited(evt);
+            }
+        });
 
         login_lbl_signin.setFont(new java.awt.Font("휴먼편지체", 0, 16)); // NOI18N
         login_lbl_signin.setText("sign in");
+        login_lbl_signin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                login_lbl_signinMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                login_lbl_signinMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                login_lbl_signinMouseExited(evt);
+            }
+        });
 
         javax.swing.GroupLayout loginFrameLayout = new javax.swing.GroupLayout(loginFrame.getContentPane());
         loginFrame.getContentPane().setLayout(loginFrameLayout);
@@ -150,6 +209,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         join_lbl_signup.setFont(new java.awt.Font("휴먼편지체", 0, 16)); // NOI18N
         join_lbl_signup.setText("sign up");
+        join_lbl_signup.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                join_lbl_signupMouseClicked(evt);
+            }
+        });
 
         join_tf_pw2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -225,50 +289,61 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("jLabel1");
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jLabel1MousePressed(evt);
-            }
-        });
+        jTabbedPane.setToolTipText("");
+        jTabbedPane.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
+        javax.swing.GroupLayout main_panelLayout = new javax.swing.GroupLayout(main_panel);
+        main_panel.setLayout(main_panelLayout);
+        main_panelLayout.setHorizontalGroup(
+            main_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+        );
+        main_panelLayout.setVerticalGroup(
+            main_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        jTabbedPane.addTab("main", main_panel);
 
-        jMenu3.setText("jMenu3");
-        jMenuBar1.add(jMenu3);
+        javax.swing.GroupLayout zettel_panelLayout = new javax.swing.GroupLayout(zettel_panel);
+        zettel_panel.setLayout(zettel_panelLayout);
+        zettel_panelLayout.setHorizontalGroup(
+            zettel_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+        );
+        zettel_panelLayout.setVerticalGroup(
+            zettel_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
-        setJMenuBar(jMenuBar1);
+        jTabbedPane.addTab("Zettelkasten", zettel_panel);
+
+        javax.swing.GroupLayout my_panelLayout = new javax.swing.GroupLayout(my_panel);
+        my_panel.setLayout(my_panelLayout);
+        my_panelLayout.setHorizontalGroup(
+            my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+        );
+        my_panelLayout.setVerticalGroup(
+            my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jTabbedPane.addTab("myPage", my_panel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(756, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap())
+            .addComponent(jTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(453, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap())
+            .addComponent(jTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
-        // TODO add your handling code here:
-        
-        //loginFrame.show();
-        joinFrame.show();
-    }//GEN-LAST:event_jLabel1MousePressed
 
     private void login_tf_pwActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_login_tf_pwActionPerformed
         // TODO add your handling code here:
@@ -281,6 +356,41 @@ public class MainFrame extends javax.swing.JFrame {
     private void join_tf_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_join_tf_nameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_join_tf_nameActionPerformed
+
+    private void login_lbl_signinMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_login_lbl_signinMouseClicked
+        // TODO add your handling code here:
+        setVisible(true);
+    }//GEN-LAST:event_login_lbl_signinMouseClicked
+
+    private void login_lbl_signinMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_login_lbl_signinMouseEntered
+        // TODO add your handling code here:
+        setUnderline(login_lbl_signin, true);
+    }//GEN-LAST:event_login_lbl_signinMouseEntered
+
+    private void login_lbl_signinMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_login_lbl_signinMouseExited
+        // TODO add your handling code here:
+        setUnderline(login_lbl_signin, false);
+    }//GEN-LAST:event_login_lbl_signinMouseExited
+
+    private void login_lbl_signupMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_login_lbl_signupMouseExited
+        // TODO add your handling code here:
+        setUnderline(login_lbl_signup, false);
+    }//GEN-LAST:event_login_lbl_signupMouseExited
+
+    private void login_lbl_signupMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_login_lbl_signupMouseEntered
+        // TODO add your handling code here:
+        setUnderline(login_lbl_signup, true);
+    }//GEN-LAST:event_login_lbl_signupMouseEntered
+
+    private void join_lbl_signupMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_join_lbl_signupMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_join_lbl_signupMouseClicked
+
+    private void login_lbl_signupMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_login_lbl_signupMouseClicked
+        // TODO add your handling code here:
+        joinFrame.setVisible(true);
+    }//GEN-LAST:event_login_lbl_signupMouseClicked
 
     /**
      * @param args the command line arguments
@@ -312,17 +422,13 @@ public class MainFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                new MainFrame().setVisible(false);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JTabbedPane jTabbedPane;
     private javax.swing.JFrame joinFrame;
     private javax.swing.JLabel join_lbl_id;
     private javax.swing.JLabel join_lbl_name;
@@ -342,5 +448,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField login_tf_id;
     private javax.swing.JTextField login_tf_pw;
     private javax.swing.JLabel login_title;
+    private javax.swing.JPanel main_panel;
+    private javax.swing.JPanel my_panel;
+    private javax.swing.JPanel zettel_panel;
     // End of variables declaration//GEN-END:variables
 }
