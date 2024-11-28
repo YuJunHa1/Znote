@@ -1,6 +1,8 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -25,9 +27,6 @@ public class MainFrame extends javax.swing.JFrame {
 
 
     public MainFrame() {
-        
-        
-        
         initComponents();
         jTabbedPane.setUI(new BasicTabbedPaneUI() { 
 	@Override 
@@ -42,7 +41,7 @@ public class MainFrame extends javax.swing.JFrame {
         @Override 
         protected int calculateTabWidth(int tabPlacement, int tabIndex, FontMetrics metrics) { 
             return 260; // 탭의 가로 크기 설정 
-	} 
+	}
 });
         getContentPane().setBackground(new Color(255, 253, 208));
         loginFrame.getContentPane().setBackground(new Color(255, 253, 208));
@@ -358,8 +357,15 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_join_tf_nameActionPerformed
 
     private void login_lbl_signinMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_login_lbl_signinMouseClicked
-        // TODO add your handling code here:
-        setVisible(true);
+
+//        String pwText = login_tf_pw.getText();
+//        String idText = login_tf_id.getText();
+//        DB_MAN DBM = new DB_MAN();
+//        try{
+//            DBM.dbOpen();
+//            DBM.stmt.execute;
+//        }
+//        setVisible(true);
     }//GEN-LAST:event_login_lbl_signinMouseClicked
 
     private void login_lbl_signinMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_login_lbl_signinMouseEntered
