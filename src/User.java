@@ -12,6 +12,7 @@ public class User {
     String userName;
     String userPassword;
     java.time.LocalDateTime createdAt;
+    java.time.LocalDateTime updatedAt;
     
     public String getUserID() {
         return userID;
@@ -43,5 +44,13 @@ public class User {
 
     public void setCreatedAt(java.time.LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+    
+    public java.time.LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    
+    public void setUpdatedAt (java.time.LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
