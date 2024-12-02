@@ -1,20 +1,29 @@
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 /*
@@ -65,6 +74,7 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         //sizeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] {16, 18, 20}));
         //탭펜 디자인 설정
+        jScrollPane1.setBorder(null);
         jTabbedPane.setUI(new BasicTabbedPaneUI() { 
 	@Override 
 	protected void installDefaults() { 
@@ -81,7 +91,7 @@ public class MainFrame extends javax.swing.JFrame {
 	} 
   
         //프레임들의 크기 및 위치 설정
-});     writeFrame.setSize(600, 400);
+});     writeFrame.setSize(630, 500);
         loginFrame.setSize(400, 300);
         joinFrame.setSize(420, 400);
         userModifyFrame.setSize(420, 420);
@@ -91,6 +101,7 @@ public class MainFrame extends javax.swing.JFrame {
         loginFrame.setLocationRelativeTo(null);
         writeFrame.setLocationRelativeTo(null);
         userModifyFrame.setLocationRelativeTo(null);
+        writeFrame.getContentPane().setBackground(new Color(255, 253, 208));
         
         // mypage_lbl_image 경로 // 
         String imagePath = "src/siba.jpg";  // 상대 경로
@@ -110,22 +121,74 @@ public class MainFrame extends javax.swing.JFrame {
         main_panel.setBackground(new Color(255, 253, 208));
         zettel_panel.setBackground(new Color(255, 253, 208));
         my_panel.setBackground(new Color(255, 253, 208));
-        lst_post.setBackground(new Color(255, 253, 208));
+
         
-        //리스트 테두리
-        lst_post.setBorder(null);
-        jScrollPane1.setBorder(null);
+        //리스트 커스터마이징 적용
+        customizeList(lst_post);
+        customizeList(mypage_lst_tag);
         
-        //텍스트 필드 배경 투명하게, 테두리 X, 밑줄 치기
+        //텍스트 필드 배경 투명하게, 테두리 X, 밑줄 치기 적용
         customizeTextField(login_tf_id);
         customizeTextField(login_tf_pw);
         customizeTextField(join_tf_id);
         customizeTextField(join_tf_pw);
         customizeTextField(join_tf_pw2);
         customizeTextField(join_tf_name);
+        customizeTextField(userModify_tf_name1);
+        customizeTextField(userModify_tf_pw1);
+        customizeTextField(userModify_tf_pw2);
+        customizeTextField(tf_search);
+        customizeTextField(write_title);
+        
+        
+        //버튼 커스터마이징 적용
+        customizeButton(btn_write);
+        customizeButton(mypage_btn_change);
+        customizeButton(mypage_btn_tag_add);
+        customizeButton(mypage_btn_user_update);
+        customizeButton(mypage_btn_tag_delete);
+        
+        //콤보박스 커스터마이징 적용
+        //customizeComboBox(backgroundColorComboBox);
+        //customizeComboBox(fontComboBox);
+        //customizeComboBox(sizeComboBox);
+        write_content.setBackground(new Color(255, 253, 208));
         
         loginFrame.setVisible(true);
+        
     }
+    
+    
+    
+    //리스트 커스터마이징
+    private void customizeList(JList<String> list) {
+    // JList 배경 색상 설정
+    list.setBackground(new Color(255, 253, 208)); // 원하는 배경 색상으로 설정
+    list.setBorder(null); // 테두리 없애기
+
+    // 아이템 커스터마이징
+    list.setCellRenderer(new DefaultListCellRenderer() {
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+            // 선택된 아이템 배경 색상
+            if (isSelected) {
+                label.setBackground(new Color(240, 240, 180)); // 선택된 아이템의 배경 색상
+                label.setForeground(Color.BLACK); // 선택된 아이템의 텍스트 색상
+            } else {
+                label.setBackground(new Color(255, 253, 208)); // 기본 배경 색상
+                label.setForeground(Color.DARK_GRAY); // 기본 텍스트 색상
+            }
+
+            // 여백 추가
+            label.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); // 위, 왼쪽, 아래, 오른쪽 여백 추가
+
+            return label;
+        }
+    });
+}
+    
     
     //텍스트필드 배경 투명하게, 테두리 없애고, 밑줄치는 메서드
      private void customizeTextField(JTextField textField) {
@@ -140,6 +203,30 @@ public class MainFrame extends javax.swing.JFrame {
     } else {
         label.setBorder(null);
     }
+    
+    
+}
+     
+     
+     
+         //버튼 커스터마이징
+    private void customizeButton(JButton button) {
+    button.setOpaque(true); // 배경을 설정할 수 있도록 함
+    button.setBackground(new Color(160, 82, 45)); // 브라운 색상
+    button.setForeground(Color.WHITE); // 텍스트는 흰색
+    button.setFocusPainted(false); // 포커스 테두리 제거
+    button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // 클릭 시 손가락 모양 커서
+
+    // 마우스 효과 추가
+    button.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent evt) {
+            button.setBackground(new Color(139, 69, 19)); // 어두운 브라운으로 변경
+        }
+
+        public void mouseExited(java.awt.event.MouseEvent evt) {
+            button.setBackground(new Color(160, 82, 45)); // 기본 브라운으로 복원
+        }
+    });
 }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -170,10 +257,13 @@ public class MainFrame extends javax.swing.JFrame {
         join_lbl_name = new javax.swing.JLabel();
         join_tf_pw = new javax.swing.JTextField();
         writeFrame = new javax.swing.JFrame();
-        jTextField1 = new javax.swing.JTextField();
+        write_title = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        write_content = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         userModifyFrame = new javax.swing.JFrame();
         join_lbl_id1 = new javax.swing.JLabel();
         userModify_lbl_pw1 = new javax.swing.JLabel();
@@ -188,11 +278,11 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jTabbedPane = new javax.swing.JTabbedPane();
         main_panel = new javax.swing.JPanel();
-        lbl_write = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lst_post = new javax.swing.JList<>();
-        jTextField2 = new javax.swing.JTextField();
+        tf_search = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        btn_write = new javax.swing.JButton();
         zettel_panel = new javax.swing.JPanel();
         my_panel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -204,10 +294,14 @@ public class MainFrame extends javax.swing.JFrame {
         sizeComboBox = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        mypage_lst_tag = new javax.swing.JList<>();
         mypage_lb_name = new javax.swing.JLabel();
-        mypage_lb_modify = new javax.swing.JLabel();
         mypage_btn_change = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        backgroundColorComboBox = new javax.swing.JComboBox<>();
+        mypage_btn_tag_add = new javax.swing.JButton();
+        mypage_btn_tag_delete = new javax.swing.JButton();
+        mypage_btn_user_update = new javax.swing.JButton();
 
         login_lbl_id.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         login_lbl_id.setText("I D");
@@ -403,16 +497,24 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(30, 30, 30))
         );
 
-        jTextField1.setFont(new java.awt.Font("휴먼편지체", 0, 24)); // NOI18N
-        jTextField1.setText("jTextField1");
+        write_title.setFont(new java.awt.Font("휴먼편지체", 0, 24)); // NOI18N
+        write_title.setText("jTextField1");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("휴먼편지체", 0, 12)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        write_content.setColumns(20);
+        write_content.setFont(new java.awt.Font("휴먼편지체", 0, 12)); // NOI18N
+        write_content.setRows(5);
+        jScrollPane2.setViewportView(write_content);
 
         jLabel1.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         jLabel1.setText("저장하기");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "없음", " " }));
+
+        jLabel8.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
+        jLabel8.setText("태그 설정");
+
+        jLabel10.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
+        jLabel10.setText("링크 연결");
 
         javax.swing.GroupLayout writeFrameLayout = new javax.swing.GroupLayout(writeFrame.getContentPane());
         writeFrame.getContentPane().setLayout(writeFrameLayout);
@@ -420,22 +522,34 @@ public class MainFrame extends javax.swing.JFrame {
             writeFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(writeFrameLayout.createSequentialGroup()
                 .addGap(49, 49, 49)
-                .addGroup(writeFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addGroup(writeFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTextField1)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)))
+                .addGroup(writeFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(writeFrameLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, writeFrameLayout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(write_title, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
         writeFrameLayout.setVerticalGroup(
             writeFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(writeFrameLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(write_title, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(writeFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(13, 13, 13)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
-                .addComponent(jLabel1)
+                .addGroup(writeFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel10))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
@@ -488,6 +602,12 @@ public class MainFrame extends javax.swing.JFrame {
 
         userModify_lbl_name1.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         userModify_lbl_name1.setText("Name");
+
+        userModify_tf_pw1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                userModify_tf_pw1MouseEntered(evt);
+            }
+        });
 
         userModify_lbl_id1.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
 
@@ -556,61 +676,58 @@ public class MainFrame extends javax.swing.JFrame {
         jTabbedPane.setToolTipText("");
         jTabbedPane.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
 
-        lbl_write.setFont(new java.awt.Font("휴먼편지체", 0, 24)); // NOI18N
-        lbl_write.setText("글쓰기");
-        lbl_write.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbl_writeMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lbl_writeMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                lbl_writeMouseExited(evt);
-            }
-        });
-
         lst_post.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         lst_post.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "계정 생성 완료!!              2024-12-03", "첫 번째 글 쓰기!!             2024-12-03", "성공! ㅎㅎ                   2024-12-03" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane1.setViewportView(lst_post);
 
-        jTextField2.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
-        jTextField2.setText("제목을 검색하세요.");
+        tf_search.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
+        tf_search.setText("제목을 검색하세요.");
 
-        jLabel5.setText("날짜별 정렬 토글 버튼");
+        jLabel5.setText("오래된 순 ▼");
+
+        btn_write.setFont(new java.awt.Font("휴먼편지체", 0, 24)); // NOI18N
+        btn_write.setText("글쓰기");
+        btn_write.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_writeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout main_panelLayout = new javax.swing.GroupLayout(main_panel);
         main_panel.setLayout(main_panelLayout);
         main_panelLayout.setHorizontalGroup(
             main_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(main_panelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(main_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 843, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, main_panelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(main_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tf_search)
+                            .addComponent(jScrollPane1)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, main_panelLayout.createSequentialGroup()
+                        .addGap(229, 715, Short.MAX_VALUE)
+                        .addComponent(jLabel5))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, main_panelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(main_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lbl_write, javax.swing.GroupLayout.Alignment.TRAILING))))
+                        .addComponent(btn_write)))
                 .addContainerGap())
         );
         main_panelLayout.setVerticalGroup(
             main_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, main_panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tf_search, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addGap(29, 29, 29)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(lbl_write)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addComponent(btn_write)
+                .addContainerGap(63, Short.MAX_VALUE))
         );
 
         jTabbedPane.addTab("main", main_panel);
@@ -619,7 +736,7 @@ public class MainFrame extends javax.swing.JFrame {
         zettel_panel.setLayout(zettel_panelLayout);
         zettel_panelLayout.setHorizontalGroup(
             zettel_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 855, Short.MAX_VALUE)
+            .addGap(0, 789, Short.MAX_VALUE)
         );
         zettel_panelLayout.setVerticalGroup(
             zettel_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -629,7 +746,7 @@ public class MainFrame extends javax.swing.JFrame {
         jTabbedPane.addTab("Zettelkasten", zettel_panel);
 
         jLabel2.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
-        jLabel2.setText("이름 :");
+        jLabel2.setText("이름");
 
         mypage_lb_createdat.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         mypage_lb_createdat.setText(" ");
@@ -639,10 +756,10 @@ public class MainFrame extends javax.swing.JFrame {
         fontComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "휴먼 엑스포", "휴먼 옛체", "휴먼 편지체" }));
 
         jLabel6.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
-        jLabel6.setText("글꼴 변경");
+        jLabel6.setText("글꼴");
 
         jLabel7.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
-        jLabel7.setText("글자 크기 변경");
+        jLabel7.setText("글자 크기");
 
         sizeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "16", "18", "20" }));
         sizeComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -654,34 +771,39 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         jLabel9.setText("태그 관리");
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        mypage_lst_tag.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "여행", "놀이", "연애", "개발" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane3.setViewportView(jList1);
+        jScrollPane3.setViewportView(mypage_lst_tag);
 
         mypage_lb_name.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
 
-        mypage_lb_modify.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
-        mypage_lb_modify.setText("사용자 정보 변경");
-        mypage_lb_modify.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                mypage_lb_modifyMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                mypage_lb_modifyMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                mypage_lb_modifyMouseExited(evt);
-            }
-        });
-
         mypage_btn_change.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
-        mypage_btn_change.setText("글꼴 크기 변경");
+        mypage_btn_change.setText("적용");
         mypage_btn_change.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mypage_btn_changeActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
+        jLabel4.setText("배경 색상");
+
+        backgroundColorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "light yellow", "light green", "sky blue", "white" }));
+
+        mypage_btn_tag_add.setFont(new java.awt.Font("휴먼편지체", 0, 14)); // NOI18N
+        mypage_btn_tag_add.setText("추가");
+
+        mypage_btn_tag_delete.setFont(new java.awt.Font("휴먼편지체", 0, 14)); // NOI18N
+        mypage_btn_tag_delete.setText("삭제");
+
+        mypage_btn_user_update.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
+        mypage_btn_user_update.setText("사용자 정보 변경");
+        mypage_btn_user_update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mypage_btn_user_updateActionPerformed(evt);
             }
         });
 
@@ -690,76 +812,77 @@ public class MainFrame extends javax.swing.JFrame {
         my_panelLayout.setHorizontalGroup(
             my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(my_panelLayout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(mypage_lbl_image, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, my_panelLayout.createSequentialGroup()
-                        .addGap(157, 157, 157)
-                        .addComponent(mypage_btn_change)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(my_panelLayout.createSequentialGroup()
-                        .addGap(61, 61, 61)
+                        .addGap(55, 55, 55)
+                        .addComponent(mypage_lbl_image, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(mypage_lb_createdat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(my_panelLayout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addGap(50, 50, 50)
+                                    .addComponent(mypage_lb_name, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel7)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel9))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, my_panelLayout.createSequentialGroup()
+                                .addComponent(mypage_btn_tag_add, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(mypage_btn_tag_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(mypage_btn_user_update, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(my_panelLayout.createSequentialGroup()
+                        .addGap(482, 482, 482)
                         .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(my_panelLayout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(120, 120, 120)
-                                .addComponent(jLabel7)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(my_panelLayout.createSequentialGroup()
-                                .addComponent(fontComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(53, 53, 53)
-                                .addComponent(sizeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE))
-                            .addGroup(my_panelLayout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(mypage_lb_name, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(mypage_lb_createdat, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(157, 157, 157))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, my_panelLayout.createSequentialGroup()
-                        .addGap(162, 162, 162)
-                        .addComponent(mypage_lb_modify)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(my_panelLayout.createSequentialGroup()
-                .addGap(124, 124, 124)
-                .addComponent(jLabel9)
-                .addGap(45, 45, 45)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(backgroundColorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(mypage_btn_change))
+                            .addComponent(fontComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sizeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
         my_panelLayout.setVerticalGroup(
             my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(my_panelLayout.createSequentialGroup()
+                .addGap(33, 33, 33)
                 .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(my_panelLayout.createSequentialGroup()
-                        .addGap(33, 33, 33)
+                        .addComponent(mypage_lbl_image, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(my_panelLayout.createSequentialGroup()
                         .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(mypage_lb_name, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
                             .addComponent(mypage_lb_createdat))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(mypage_lb_modify)
-                        .addGap(42, 42, 42)
-                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7))
+                        .addGap(18, 18, 18)
+                        .addComponent(mypage_btn_user_update)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(fontComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(fontComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)
                             .addComponent(sizeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(mypage_btn_change))
-                    .addGroup(my_panelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(mypage_lbl_image, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(my_panelLayout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(jLabel9)))
-                .addContainerGap(122, Short.MAX_VALUE))
+                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(backgroundColorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(mypage_btn_change))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(mypage_btn_tag_delete)
+                            .addComponent(mypage_btn_tag_add))
+                        .addGap(72, 72, 72))))
         );
 
         jTabbedPane.addTab("myPage", my_panel);
@@ -895,33 +1018,6 @@ public class MainFrame extends javax.swing.JFrame {
         setUnderline(join_lbl_signup, false);
     }//GEN-LAST:event_join_lbl_signupMouseExited
 
-    private void lbl_writeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_writeMouseEntered
-        // TODO add your handling code here:
-        setUnderline(lbl_write, true);
-    }//GEN-LAST:event_lbl_writeMouseEntered
-
-    private void lbl_writeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_writeMouseExited
-        // TODO add your handling code here:
-        setUnderline(lbl_write, false);
-    }//GEN-LAST:event_lbl_writeMouseExited
-
-    private void lbl_writeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_writeMouseClicked
-        // TODO add your handling code here:
-        writeFrame.setVisible(true);
-    }//GEN-LAST:event_lbl_writeMouseClicked
-
-    private void mypage_lb_modifyMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mypage_lb_modifyMouseEntered
-        setUnderline(mypage_lb_modify, true);
-    }//GEN-LAST:event_mypage_lb_modifyMouseEntered
-
-    private void mypage_lb_modifyMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mypage_lb_modifyMouseExited
-        setUnderline(mypage_lb_modify, false);
-    }//GEN-LAST:event_mypage_lb_modifyMouseExited
-
-    private void mypage_lb_modifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mypage_lb_modifyMouseClicked
-        userModifyFrame.setVisible(true);
-    }//GEN-LAST:event_mypage_lb_modifyMouseClicked
-
     private void userModify_lbl_modifyAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_userModify_lbl_modifyAncestorAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_userModify_lbl_modifyAncestorAdded
@@ -991,6 +1087,21 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_sizeComboBoxActionPerformed
 
+    private void mypage_btn_user_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mypage_btn_user_updateActionPerformed
+        // TODO add your handling code here:
+        userModifyFrame.setVisible(true);
+    }//GEN-LAST:event_mypage_btn_user_updateActionPerformed
+
+    private void userModify_tf_pw1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userModify_tf_pw1MouseEntered
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_userModify_tf_pw1MouseEntered
+
+    private void btn_writeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_writeActionPerformed
+        // TODO add your handling code here:
+        writeFrame.setVisible(true);
+    }//GEN-LAST:event_btn_writeActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1027,22 +1138,24 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> backgroundColorComboBox;
+    private javax.swing.JButton btn_write;
     private javax.swing.JComboBox<String> fontComboBox;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JFrame joinFrame;
     private javax.swing.JLabel join_lbl_id;
     private javax.swing.JLabel join_lbl_id1;
@@ -1056,7 +1169,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField join_tf_pw2;
     private javax.swing.JLabel join_title;
     private javax.swing.JLabel join_title1;
-    private javax.swing.JLabel lbl_write;
     private javax.swing.JFrame loginFrame;
     private javax.swing.JLabel login_lbl_id;
     private javax.swing.JLabel login_lbl_pw;
@@ -1069,11 +1181,15 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel main_panel;
     private javax.swing.JPanel my_panel;
     private javax.swing.JButton mypage_btn_change;
+    private javax.swing.JButton mypage_btn_tag_add;
+    private javax.swing.JButton mypage_btn_tag_delete;
+    private javax.swing.JButton mypage_btn_user_update;
     private javax.swing.JLabel mypage_lb_createdat;
-    private javax.swing.JLabel mypage_lb_modify;
     private javax.swing.JLabel mypage_lb_name;
     private javax.swing.JLabel mypage_lbl_image;
+    private javax.swing.JList<String> mypage_lst_tag;
     private javax.swing.JComboBox<String> sizeComboBox;
+    private javax.swing.JTextField tf_search;
     private javax.swing.JFrame userModifyFrame;
     private javax.swing.JLabel userModify_lbl_id1;
     private javax.swing.JLabel userModify_lbl_modify;
@@ -1084,6 +1200,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField userModify_tf_pw1;
     private javax.swing.JTextField userModify_tf_pw2;
     private javax.swing.JFrame writeFrame;
+    private javax.swing.JTextArea write_content;
+    private javax.swing.JTextField write_title;
     private javax.swing.JPanel zettel_panel;
     // End of variables declaration//GEN-END:variables
 }
