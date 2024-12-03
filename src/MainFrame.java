@@ -284,6 +284,9 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         btn_write = new javax.swing.JButton();
         zettel_panel = new javax.swing.JPanel();
+        lbl_graph_image_viewer = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
         my_panel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         mypage_lb_createdat = new javax.swing.JLabel();
@@ -713,7 +716,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(jLabel5))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, main_panelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btn_write)))
+                        .addComponent(btn_write, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         main_panelLayout.setVerticalGroup(
@@ -727,23 +730,55 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btn_write)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         jTabbedPane.addTab("main", main_panel);
+
+        lbl_graph_image_viewer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/final_graph_image.png"))); // NOI18N
+
+        jButton1.setFont(new java.awt.Font("휴먼편지체", 0, 24)); // NOI18N
+        jButton1.setText("편집");
+        jButton1.setMaximumSize(new java.awt.Dimension(83, 35));
+        jButton1.setMinimumSize(new java.awt.Dimension(83, 35));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setFont(new java.awt.Font("휴먼편지체", 0, 24)); // NOI18N
+        jLabel11.setText("링크 개수 : 3개");
 
         javax.swing.GroupLayout zettel_panelLayout = new javax.swing.GroupLayout(zettel_panel);
         zettel_panel.setLayout(zettel_panelLayout);
         zettel_panelLayout.setHorizontalGroup(
             zettel_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 789, Short.MAX_VALUE)
+            .addGroup(zettel_panelLayout.createSequentialGroup()
+                .addGroup(zettel_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(zettel_panelLayout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(lbl_graph_image_viewer, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, zettel_panelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(125, Short.MAX_VALUE))
         );
         zettel_panelLayout.setVerticalGroup(
             zettel_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(zettel_panelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbl_graph_image_viewer, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62)
+                .addGroup(zettel_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(153, Short.MAX_VALUE))
         );
 
-        jTabbedPane.addTab("Zettelkasten", zettel_panel);
+        jTabbedPane.addTab("Graph View", zettel_panel);
 
         jLabel2.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         jLabel2.setText("이름");
@@ -861,7 +896,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(mypage_lb_createdat))
                         .addGap(18, 18, 18)
                         .addComponent(mypage_btn_user_update)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                         .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(fontComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -895,7 +930,10 @@ public class MainFrame extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane)
+                .addContainerGap())
         );
 
         pack();
@@ -1102,6 +1140,10 @@ public class MainFrame extends javax.swing.JFrame {
         writeFrame.setVisible(true);
     }//GEN-LAST:event_btn_writeActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1141,9 +1183,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> backgroundColorComboBox;
     private javax.swing.JButton btn_write;
     private javax.swing.JComboBox<String> fontComboBox;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1169,6 +1213,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField join_tf_pw2;
     private javax.swing.JLabel join_title;
     private javax.swing.JLabel join_title1;
+    private javax.swing.JLabel lbl_graph_image_viewer;
     private javax.swing.JFrame loginFrame;
     private javax.swing.JLabel login_lbl_id;
     private javax.swing.JLabel login_lbl_pw;
