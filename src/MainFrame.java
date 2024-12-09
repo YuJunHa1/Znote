@@ -9,20 +9,30 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
@@ -40,17 +50,17 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
-    public void updateFontForAllComponents(Container container, Font font) {
-        Component[] components = container.getComponents();
-        for (Component component : components) {
+    public void updateForAllComponents(Container container, Font font, Color color) {
+        for (Component component : container.getComponents()) {
             component.setFont(font);
+            component.setBackground(color);
             if (component instanceof Container) {
-                updateFontForAllComponents((Container) component, font);
+                updateForAllComponents((Container) component, font, color);
             }
         }
     }
     
-    
+    String pw_check = null; // my page 에서 비밀번호 검증을 위한 전역 변수 설정.
     // DAO 에서 데이터 get 해온 후 이름 set
      public void setUser(String userID) {
         System.out.println("setUser 호출됨. userID: " + userID);
@@ -63,15 +73,22 @@ public class MainFrame extends javax.swing.JFrame {
             mypage_lb_name.setText(user.getUserName());
             mypage_lb_createdat.setText(user.getCreatedAt().format(formatter) + " 가입"); 
             // userModify 페이지
+            pw_check = user.getUserPassword(); // 비밀번호 검증 위해서 값 저장 
             userModify_lbl_id1.setText(user.getUserID());
+            // paswword check
         } else {
             mypage_lb_name.setText("사용자 정보 없음");
             mypage_lb_createdat.setText("사용자 정보 없음");
         }
     }
-    
-    public MainFrame() {
+    // 캡챠 관련
+    String captcha;
+    CAPTCHAGenerator initiateProgram;
+    public MainFrame() throws IOException {
         initComponents();
+        this.initiateProgram = new CAPTCHAGenerator(login_lbl_captcha_image);
+        captcha = initiateProgram.Generate();
+
         //sizeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] {16, 18, 20}));
         //탭펜 디자인 설정
         jScrollPane1.setBorder(null);
@@ -95,6 +112,7 @@ public class MainFrame extends javax.swing.JFrame {
         loginFrame.setSize(400, 300);
         joinFrame.setSize(420, 400);
         userModifyFrame.setSize(420, 420);
+        password_check_dialog.setSize(350, 250);
         this.setSize(800, 600);
         this.setLocationRelativeTo(null);
         joinFrame.setLocationRelativeTo(null);
@@ -111,16 +129,18 @@ public class MainFrame extends javax.swing.JFrame {
         ImageIcon resizedIcon = new ImageIcon(resizedImage); // JLabel에 사용할 새로운 아이콘 생성
         mypage_lbl_image.setIcon(resizedIcon);
         // mypage_lbl_image 경로 //
-        
+    
         //포스트잇 색으로 색상 설정
         getContentPane().setBackground(new Color(255, 253, 208));
         loginFrame.getContentPane().setBackground(new Color(255, 253, 208));
         joinFrame.getContentPane().setBackground(new Color(255, 253, 208));
         userModifyFrame.getContentPane().setBackground(new Color(255, 253, 208));
+        password_check_dialog.getContentPane().setBackground(new Color(255, 253, 208));
         jTabbedPane.setBackground(new Color(255, 253, 208));
         main_panel.setBackground(new Color(255, 253, 208));
         zettel_panel.setBackground(new Color(255, 253, 208));
         my_panel.setBackground(new Color(255, 253, 208));
+        
 
         
         //리스트 커스터마이징 적용
@@ -139,7 +159,8 @@ public class MainFrame extends javax.swing.JFrame {
         customizeTextField(userModify_tf_pw2);
         customizeTextField(tf_search);
         customizeTextField(write_title);
-        
+        customizeTextField(password_check_tf);
+        customizeTextField(mypage_tf_tag);
         
         //버튼 커스터마이징 적용
         customizeButton(btn_write);
@@ -147,6 +168,8 @@ public class MainFrame extends javax.swing.JFrame {
         customizeButton(mypage_btn_tag_add);
         customizeButton(mypage_btn_user_update);
         customizeButton(mypage_btn_tag_delete);
+        customizeButton(mypage_btn_image_change);
+        customizeButton(password_check_btn);
         
         //콤보박스 커스터마이징 적용
         //customizeComboBox(backgroundColorComboBox);
@@ -156,9 +179,27 @@ public class MainFrame extends javax.swing.JFrame {
         
         loginFrame.setVisible(true);
         
+        // listModel을 초기화하고 JList에 설정합니다.    
+        listModel = new DefaultListModel<>();
+        
+        listModel.addElement("개발");
+        listModel.addElement("여행");
+        listModel.addElement("놀이");
+        
+        mypage_lst_tag.setModel(listModel);
     }
     
-    
+    // 프로필 파일 설정
+    private void setProfilePicture(File imageFile) {
+             try {
+                BufferedImage img = ImageIO.read(imageFile);
+                ImageIcon icon = new ImageIcon(img.getScaledInstance(250, 250, Image.SCALE_SMOOTH));
+                mypage_lbl_image.setIcon(icon); // JLabel에 이미지 아이콘 설정
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "이미지를 불러오는 중 오류가 발생했습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     
     //리스트 커스터마이징
     private void customizeList(JList<String> list) {
@@ -245,6 +286,9 @@ public class MainFrame extends javax.swing.JFrame {
         login_title = new javax.swing.JLabel();
         login_lbl_signup = new javax.swing.JLabel();
         login_lbl_signin = new javax.swing.JLabel();
+        login_lbl_captcha = new javax.swing.JLabel();
+        login_lbl_captcha_image = new javax.swing.JLabel();
+        login_tf_captcha = new javax.swing.JTextField();
         joinFrame = new javax.swing.JFrame();
         join_lbl_id = new javax.swing.JLabel();
         join_lbl_pw = new javax.swing.JLabel();
@@ -276,6 +320,12 @@ public class MainFrame extends javax.swing.JFrame {
         userModify_tf_pw1 = new javax.swing.JTextField();
         userModify_lbl_id1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        password_check_dialog = new javax.swing.JDialog();
+        password_check_lbl1 = new javax.swing.JLabel();
+        password_check_lbl2 = new javax.swing.JLabel();
+        password_check_tf = new javax.swing.JTextField();
+        password_check_btn = new javax.swing.JButton();
+        jFileChooser = new javax.swing.JFileChooser();
         jTabbedPane = new javax.swing.JTabbedPane();
         main_panel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -305,6 +355,8 @@ public class MainFrame extends javax.swing.JFrame {
         mypage_btn_tag_add = new javax.swing.JButton();
         mypage_btn_tag_delete = new javax.swing.JButton();
         mypage_btn_user_update = new javax.swing.JButton();
+        mypage_btn_image_change = new javax.swing.JButton();
+        mypage_tf_tag = new javax.swing.JTextField();
 
         login_lbl_id.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         login_lbl_id.setText("I D");
@@ -349,39 +401,59 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        login_lbl_captcha.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
+        login_lbl_captcha.setText("문자 입력 :");
+
+        login_tf_captcha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                login_tf_captchaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout loginFrameLayout = new javax.swing.GroupLayout(loginFrame.getContentPane());
         loginFrame.getContentPane().setLayout(loginFrameLayout);
         loginFrameLayout.setHorizontalGroup(
             loginFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(loginFrameLayout.createSequentialGroup()
-                .addGap(177, 177, 177)
-                .addComponent(login_lbl_signup)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginFrameLayout.createSequentialGroup()
                 .addContainerGap(46, Short.MAX_VALUE)
                 .addGroup(loginFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginFrameLayout.createSequentialGroup()
                         .addGroup(loginFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(login_lbl_signin)
-                            .addGroup(loginFrameLayout.createSequentialGroup()
-                                .addComponent(login_lbl_pw)
-                                .addGap(18, 18, 18)
-                                .addComponent(login_tf_pw, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(loginFrameLayout.createSequentialGroup()
                                 .addComponent(login_lbl_id)
                                 .addGap(18, 18, 18)
-                                .addComponent(login_tf_id, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(login_tf_id, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(loginFrameLayout.createSequentialGroup()
+                                .addComponent(login_lbl_pw)
+                                .addGap(18, 18, 18)
+                                .addComponent(login_tf_pw, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(33, 33, 33))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginFrameLayout.createSequentialGroup()
                         .addComponent(login_title)
                         .addGap(172, 172, 172))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginFrameLayout.createSequentialGroup()
+                .addGroup(loginFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, loginFrameLayout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(login_lbl_captcha)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(login_tf_captcha))
+                    .addGroup(loginFrameLayout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addComponent(login_lbl_signup)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(login_lbl_signin))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, loginFrameLayout.createSequentialGroup()
+                        .addGap(108, 108, 108)
+                        .addComponent(login_lbl_captcha_image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(95, 95, 95))
         );
         loginFrameLayout.setVerticalGroup(
             loginFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(loginFrameLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(login_title, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(loginFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(login_tf_id, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(login_lbl_id))
@@ -389,11 +461,17 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(loginFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(login_tf_pw, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(login_lbl_pw))
-                .addGap(18, 18, 18)
-                .addComponent(login_lbl_signin)
-                .addGap(66, 66, 66)
-                .addComponent(login_lbl_signup)
-                .addGap(30, 30, 30))
+                .addGap(14, 14, 14)
+                .addComponent(login_lbl_captcha_image, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(loginFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(login_lbl_captcha)
+                    .addComponent(login_tf_captcha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
+                .addGroup(loginFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(login_lbl_signup)
+                    .addComponent(login_lbl_signin))
+                .addGap(29, 29, 29))
         );
 
         join_lbl_id.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
@@ -674,6 +752,53 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(28, 28, 28))
         );
 
+        password_check_lbl1.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
+        password_check_lbl1.setText("현재 비밀번호 확인");
+
+        password_check_lbl2.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
+        password_check_lbl2.setText("Password :");
+
+        password_check_btn.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
+        password_check_btn.setText("확인");
+        password_check_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                password_check_btnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout password_check_dialogLayout = new javax.swing.GroupLayout(password_check_dialog.getContentPane());
+        password_check_dialog.getContentPane().setLayout(password_check_dialogLayout);
+        password_check_dialogLayout.setHorizontalGroup(
+            password_check_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(password_check_dialogLayout.createSequentialGroup()
+                .addGroup(password_check_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(password_check_dialogLayout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addGroup(password_check_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(password_check_lbl1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(password_check_dialogLayout.createSequentialGroup()
+                                .addComponent(password_check_lbl2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(password_check_tf, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(password_check_dialogLayout.createSequentialGroup()
+                        .addGap(150, 150, 150)
+                        .addComponent(password_check_btn)))
+                .addContainerGap(131, Short.MAX_VALUE))
+        );
+        password_check_dialogLayout.setVerticalGroup(
+            password_check_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(password_check_dialogLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(password_check_lbl1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(password_check_dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(password_check_lbl2)
+                    .addComponent(password_check_tf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(password_check_btn)
+                .addContainerGap(135, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTabbedPane.setToolTipText("");
@@ -788,7 +913,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         mypage_lbl_image.setFont(new java.awt.Font("맑은 고딕", 0, 24)); // NOI18N
 
-        fontComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "휴먼 엑스포", "휴먼 옛체", "휴먼 편지체" }));
+        fontComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "휴먼편지체", "맑은고딕", "바탕" }));
 
         jLabel6.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         jLabel6.setText("글꼴");
@@ -796,7 +921,7 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         jLabel7.setText("글자 크기");
 
-        sizeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "16", "18", "20" }));
+        sizeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "14", "16", "18", " " }));
         sizeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sizeComboBoxActionPerformed(evt);
@@ -826,19 +951,37 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         jLabel4.setText("배경 색상");
 
-        backgroundColorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "light yellow", "light green", "sky blue", "white" }));
+        backgroundColorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Light Yellow", "Light Green", "Sky Blue", "White" }));
 
         mypage_btn_tag_add.setFont(new java.awt.Font("휴먼편지체", 0, 14)); // NOI18N
         mypage_btn_tag_add.setText("추가");
+        mypage_btn_tag_add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mypage_btn_tag_addActionPerformed(evt);
+            }
+        });
 
         mypage_btn_tag_delete.setFont(new java.awt.Font("휴먼편지체", 0, 14)); // NOI18N
         mypage_btn_tag_delete.setText("삭제");
+        mypage_btn_tag_delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mypage_btn_tag_deleteActionPerformed(evt);
+            }
+        });
 
         mypage_btn_user_update.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         mypage_btn_user_update.setText("사용자 정보 변경");
         mypage_btn_user_update.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mypage_btn_user_updateActionPerformed(evt);
+            }
+        });
+
+        mypage_btn_image_change.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
+        mypage_btn_image_change.setText("사진 변경");
+        mypage_btn_image_change.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mypage_btn_image_changeActionPerformed(evt);
             }
         });
 
@@ -849,37 +992,59 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(my_panelLayout.createSequentialGroup()
                 .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(my_panelLayout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(mypage_lbl_image, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(52, 52, 52)
+                        .addComponent(mypage_lbl_image, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(my_panelLayout.createSequentialGroup()
+                        .addGap(103, 103, 103)
+                        .addComponent(mypage_btn_image_change, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(my_panelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(mypage_lb_createdat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(my_panelLayout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addGap(50, 50, 50)
-                                    .addComponent(mypage_lb_name, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel7)
-                                .addComponent(jLabel6)
-                                .addComponent(jLabel9))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, my_panelLayout.createSequentialGroup()
-                                .addComponent(mypage_btn_tag_add, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(mypage_btn_tag_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(mypage_btn_user_update, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(my_panelLayout.createSequentialGroup()
-                        .addGap(482, 482, 482)
-                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(my_panelLayout.createSequentialGroup()
-                                .addComponent(backgroundColorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(mypage_btn_change))
-                            .addComponent(fontComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sizeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap(87, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addGap(50, 50, 50)
+                                .addComponent(mypage_lb_name, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(66, 66, 66))
+                            .addGroup(my_panelLayout.createSequentialGroup()
+                                .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(my_panelLayout.createSequentialGroup()
+                                        .addGap(62, 62, 62)
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(fontComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, my_panelLayout.createSequentialGroup()
+                                        .addGap(40, 40, 40)
+                                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(my_panelLayout.createSequentialGroup()
+                                                .addComponent(jLabel7)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(sizeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(my_panelLayout.createSequentialGroup()
+                                                .addComponent(jLabel4)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(backgroundColorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(34, 34, 34))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, my_panelLayout.createSequentialGroup()
+                                .addGap(81, 81, 81)
+                                .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
+                                    .addGroup(my_panelLayout.createSequentialGroup()
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(mypage_tf_tag, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)))
+                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(mypage_btn_tag_add, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(mypage_btn_change)
+                            .addComponent(mypage_btn_tag_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(58, 58, 58)))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         my_panelLayout.setVerticalGroup(
             my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -888,6 +1053,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(my_panelLayout.createSequentialGroup()
                         .addComponent(mypage_lbl_image, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(mypage_btn_image_change)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(my_panelLayout.createSequentialGroup()
                         .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -896,28 +1063,31 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(mypage_lb_createdat))
                         .addGap(18, 18, 18)
                         .addComponent(mypage_btn_user_update)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(fontComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                         .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(sizeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                            .addComponent(jLabel6)
+                            .addComponent(fontComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(sizeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(backgroundColorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(mypage_btn_change))
+                            .addComponent(mypage_btn_change)
+                            .addComponent(backgroundColorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)
-                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(mypage_btn_tag_delete)
-                            .addComponent(mypage_btn_tag_add))
-                        .addGap(72, 72, 72))))
+                        .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(my_panelLayout.createSequentialGroup()
+                                .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(mypage_btn_tag_add)
+                                    .addComponent(mypage_tf_tag, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(mypage_btn_tag_delete)))
+                        .addGap(100, 100, 100))))
         );
 
         jTabbedPane.addTab("myPage", my_panel);
@@ -961,8 +1131,18 @@ public class MainFrame extends javax.swing.JFrame {
         }
         UserDAO userDAO = new UserDAO();
         int result = userDAO.login(login_tf_id.getText(), login_tf_pw.getText());
-        
+
+      
         if(result == 1){
+            try {
+                boolean captchaResult = captcha(); // 캡챠 메소드 호출하여 결과를 bool 로 받기
+            if (!captchaResult) {
+                return; // 캡챠 실패 시, 로그인을 진행하지 않고 리턴
+            }
+
+} catch (IOException ex) {
+    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+}
             loginFrame.setVisible(false);
             this.setVisible(true);
             
@@ -1003,6 +1183,18 @@ public class MainFrame extends javax.swing.JFrame {
         setUnderline(login_lbl_signup, true);
     }//GEN-LAST:event_login_lbl_signupMouseEntered
 
+    
+    public boolean captcha() throws IOException {
+        if(captcha.equals(login_tf_captcha.getText())){
+            return true;
+            }else{
+                captcha = initiateProgram.Generate();
+                JOptionPane.showMessageDialog(null, "자동입력방지 문자를 잘못입력하셨습니다.", "Error_Message", JOptionPane.ERROR_MESSAGE);
+                login_tf_captcha.setText(null);
+                return false;
+            }
+    }
+    
     private void join_lbl_signupMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_join_lbl_signupMouseClicked
         // TODO add your handling code here:
         //입력되지 않은 사항이 있을 때
@@ -1032,7 +1224,7 @@ public class MainFrame extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null, "이미 사용중인 아이디 입니다.", "오류", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }else{
-            javax.swing.JOptionPane.showMessageDialog(null, "회원가입이 성공적으로 완료되었습니다.", "성공", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(null, "회원가입이 완료되었습니다.", "성공", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             joinFrame.setVisible(false);
         }
     }//GEN-LAST:event_join_lbl_signupMouseClicked
@@ -1115,10 +1307,32 @@ public class MainFrame extends javax.swing.JFrame {
         String selectedFont = (String)fontComboBox.getSelectedItem();
         String selectedSizeStr = sizeComboBox.getSelectedItem().toString();
         int selectedSize = Integer.parseInt(selectedSizeStr);
-            Font newFont = new Font(selectedFont, Font.PLAIN, selectedSize);
+        Font newFont = new Font(selectedFont, Font.PLAIN, selectedSize);
             
+            // 배경 색상 선택
+            String selectedColorStr = (String)backgroundColorComboBox.getSelectedItem();
+            Color selectedColor = null;
+            
+            // 배경 색상을 String에서 Color로 매핑
+            switch (selectedColorStr) {
+                case "Light Yellow":
+                    selectedColor = new Color(255, 255, 224); // Light Yellow
+                break;
+                case "Light Green":
+                    selectedColor = new Color(144, 238, 144); // Light Green
+                break;
+                case "Sky Blue":
+                    selectedColor = new Color(135, 206, 235); // Sky Blue
+                break;
+                case "White":
+                    selectedColor = Color.WHITE; // White
+                break;
+    }
             // 전체 프레임의 모든 컴포넌트의 폰트를 변경
-            updateFontForAllComponents(getContentPane(), newFont);
+            updateForAllComponents(getContentPane(), newFont, selectedColor);
+            
+             getContentPane().revalidate(); // 레이아웃 다시 계산
+             getContentPane().repaint();    // UI 다시 그리기
     }//GEN-LAST:event_mypage_btn_changeActionPerformed
 
     private void sizeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sizeComboBoxActionPerformed
@@ -1127,7 +1341,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void mypage_btn_user_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mypage_btn_user_updateActionPerformed
         // TODO add your handling code here:
-        userModifyFrame.setVisible(true);
+        password_check_dialog.setVisible(true);
     }//GEN-LAST:event_mypage_btn_user_updateActionPerformed
 
     private void userModify_tf_pw1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userModify_tf_pw1MouseEntered
@@ -1143,6 +1357,70 @@ public class MainFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void password_check_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_password_check_btnActionPerformed
+        if (
+        password_check_tf.getText().trim().isEmpty() ) {
+        javax.swing.JOptionPane.showMessageDialog(null, 
+            "비밀번호 입력이 되지 않았습니다.", "오류", javax.swing.JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+        //비밀번호 확인이 틀렸을 경우
+        String pw1 = password_check_tf.getText();
+           
+        
+        //String DAO_pw = user.getUserPassword();
+        
+        if(pw_check.equals(pw1)){
+            javax.swing.JOptionPane.showMessageDialog(null, "비밀번호 검증이 완료되었습니다.", "성공", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+           
+            userModifyFrame.setVisible(true);
+            password_check_dialog.setVisible(false);
+        } else{
+            javax.swing.JOptionPane.showMessageDialog(null, "비밀번호가 맞지않습니다.", "오류", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_password_check_btnActionPerformed
+    
+    private final DefaultListModel<String> listModel;
+    
+    private void mypage_btn_tag_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mypage_btn_tag_addActionPerformed
+        DefaultListModel<String> listModel = (DefaultListModel<String>) mypage_lst_tag.getModel();
+        String newTag = mypage_tf_tag.getText().trim();
+        if (!newTag.isEmpty()) {
+            listModel.addElement(newTag);
+            mypage_tf_tag.setText("");
+        }
+    }//GEN-LAST:event_mypage_btn_tag_addActionPerformed
+
+    private void mypage_btn_tag_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mypage_btn_tag_deleteActionPerformed
+        // 선택된 항목의 인덱스를 가져옵니다.
+    int selectedIndex = mypage_lst_tag.getSelectedIndex();
+
+    // 선택된 항목이 있는지 확인하고, 있으면 삭제합니다.
+    if (selectedIndex != -1) {
+        listModel.remove(selectedIndex);
+    } else {
+        // 항목이 선택되지 않았을 경우 메시지를 띄울 수 있습니다.
+        JOptionPane.showMessageDialog(this, "삭제할 항목을 선택해주세요.", "오류", JOptionPane.WARNING_MESSAGE);
+    }
+    }//GEN-LAST:event_mypage_btn_tag_deleteActionPerformed
+
+    private void mypage_btn_image_changeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mypage_btn_image_changeActionPerformed
+        // 파일 선택 대화상자를 이용해 사진 파일을 가져오기
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("프로필 사진 선택");
+    fileChooser.setFileFilter(new FileNameExtensionFilter("이미지 파일", "jpg", "jpeg", "png"));
+    
+    int result = fileChooser.showOpenDialog(this);
+    if (result == JFileChooser.APPROVE_OPTION) {
+        File selectedFile = fileChooser.getSelectedFile();
+        setProfilePicture(selectedFile);
+    }
+    }//GEN-LAST:event_mypage_btn_image_changeActionPerformed
+
+    private void login_tf_captchaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_login_tf_captchaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_login_tf_captchaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1174,7 +1452,11 @@ public class MainFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(false);
+                try {
+                    new MainFrame().setVisible(false);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -1185,6 +1467,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> fontComboBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JFileChooser jFileChooser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1215,10 +1498,13 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel join_title1;
     private javax.swing.JLabel lbl_graph_image_viewer;
     private javax.swing.JFrame loginFrame;
+    private javax.swing.JLabel login_lbl_captcha;
+    private javax.swing.JLabel login_lbl_captcha_image;
     private javax.swing.JLabel login_lbl_id;
     private javax.swing.JLabel login_lbl_pw;
     private javax.swing.JLabel login_lbl_signin;
     private javax.swing.JLabel login_lbl_signup;
+    private javax.swing.JTextField login_tf_captcha;
     private javax.swing.JTextField login_tf_id;
     private javax.swing.JTextField login_tf_pw;
     private javax.swing.JLabel login_title;
@@ -1226,6 +1512,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel main_panel;
     private javax.swing.JPanel my_panel;
     private javax.swing.JButton mypage_btn_change;
+    private javax.swing.JButton mypage_btn_image_change;
     private javax.swing.JButton mypage_btn_tag_add;
     private javax.swing.JButton mypage_btn_tag_delete;
     private javax.swing.JButton mypage_btn_user_update;
@@ -1233,6 +1520,12 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel mypage_lb_name;
     private javax.swing.JLabel mypage_lbl_image;
     private javax.swing.JList<String> mypage_lst_tag;
+    private javax.swing.JTextField mypage_tf_tag;
+    private javax.swing.JButton password_check_btn;
+    private javax.swing.JDialog password_check_dialog;
+    private javax.swing.JLabel password_check_lbl1;
+    private javax.swing.JLabel password_check_lbl2;
+    private javax.swing.JTextField password_check_tf;
     private javax.swing.JComboBox<String> sizeComboBox;
     private javax.swing.JTextField tf_search;
     private javax.swing.JFrame userModifyFrame;
