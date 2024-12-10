@@ -866,7 +866,7 @@ public class MainFrame extends javax.swing.JFrame {
         lblExplaTitle2.setFont(new java.awt.Font("휴먼편지체", 0, 24)); // NOI18N
         lblExplaTitle2.setText("제텔카스텐(Zettelkasten)의 작성법");
 
-        lblExpla1.setBackground(new java.awt.Color(242, 242, 242));
+        lblExpla1.setBackground(new java.awt.Color(255, 253, 208));
         lblExpla1.setColumns(20);
         lblExpla1.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         lblExpla1.setRows(5);
@@ -877,7 +877,7 @@ public class MainFrame extends javax.swing.JFrame {
         lblExplaTitle1.setFont(new java.awt.Font("휴먼편지체", 0, 24)); // NOI18N
         lblExplaTitle1.setText("제텔카스텐(Zettelkasten) 이란?");
 
-        lblExpla2.setBackground(new java.awt.Color(242, 242, 242));
+        lblExpla2.setBackground(new java.awt.Color(255, 253, 208));
         lblExpla2.setColumns(20);
         lblExpla2.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         lblExpla2.setRows(5);
@@ -908,7 +908,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(lblExplaTitle1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addComponent(lblExplaTitle2)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
