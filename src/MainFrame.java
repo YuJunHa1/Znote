@@ -334,9 +334,12 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         btn_write = new javax.swing.JButton();
         zettel_panel = new javax.swing.JPanel();
-        lbl_graph_image_viewer = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jLabel11 = new javax.swing.JLabel();
+        lblExplaTitle2 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        lblExpla1 = new javax.swing.JTextArea();
+        lblExplaTitle1 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        lblExpla2 = new javax.swing.JTextArea();
         my_panel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         mypage_lb_createdat = new javax.swing.JLabel();
@@ -837,7 +840,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(tf_search)
                             .addComponent(jScrollPane1)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, main_panelLayout.createSequentialGroup()
-                        .addGap(229, 715, Short.MAX_VALUE)
+                        .addGap(229, 841, Short.MAX_VALUE)
                         .addComponent(jLabel5))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, main_panelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -855,55 +858,64 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btn_write)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         jTabbedPane.addTab("main", main_panel);
 
-        lbl_graph_image_viewer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/final_graph_image.png"))); // NOI18N
+        lblExplaTitle2.setFont(new java.awt.Font("휴먼편지체", 0, 24)); // NOI18N
+        lblExplaTitle2.setText("제텔카스텐(Zettelkasten)의 작성법");
 
-        jButton1.setFont(new java.awt.Font("휴먼편지체", 0, 24)); // NOI18N
-        jButton1.setText("편집");
-        jButton1.setMaximumSize(new java.awt.Dimension(83, 35));
-        jButton1.setMinimumSize(new java.awt.Dimension(83, 35));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        lblExpla1.setBackground(new java.awt.Color(255, 253, 208));
+        lblExpla1.setColumns(20);
+        lblExpla1.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
+        lblExpla1.setRows(5);
+        lblExpla1.setText("제텔카스텐은 독일어로 \"메모상자\"라는 뜻으로, 니콜라스 루만이 고안한 독창적인 정보 관리 및 창의적 사고 도구이다.\n그는 아이디어와 지식을 효과적으로 정리하고 연결 해 70권 이상의 저서와 400편 이상의 논문을 집필하였다.\n\n제텔카스텐은 단순히 정보는 저장하는 것을 넘어서, 아이디어 간의 관계를 구축하는데 중점을 둔다. 서로 다른 아이디어가 연결되\n며 새로운 통찰과 창의적인 발상이 가능해진다.\n또한 연결된 각 아이디어들이 서로 조합되며 대주제와 새로운 아이디어를 만들 수 있는 상향식 구조가 대표적인 특징이다.\n\n이를 위해 링크와 태그 시스템을 도입하여 아이디어를 작성하고, 이를 자주 읽으며 아이디어 등을 재조직한다.");
+        lblExpla1.setBorder(null);
+        jScrollPane4.setViewportView(lblExpla1);
 
-        jLabel11.setFont(new java.awt.Font("휴먼편지체", 0, 24)); // NOI18N
-        jLabel11.setText("링크 개수 : 3개");
+        lblExplaTitle1.setFont(new java.awt.Font("휴먼편지체", 0, 24)); // NOI18N
+        lblExplaTitle1.setText("제텔카스텐(Zettelkasten) 이란?");
+
+        lblExpla2.setBackground(new java.awt.Color(255, 253, 208));
+        lblExpla2.setColumns(20);
+        lblExpla2.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
+        lblExpla2.setRows(5);
+        lblExpla2.setText("1. 하나의 메모에는 하나의 아이디어만 작성\n2. 이해하기 쉽고 직관적인 언어로 작성\n3. 서로 연관된 다른 아이디어와의 링크를 생성하고 문서를 분류할 수 있는 태그를 설정\n4. 주기적으로 아이디어를 읽으며, 링크를 타고 글을 읽으면서 아이디어를 재조직한다.");
+        jScrollPane5.setViewportView(lblExpla2);
 
         javax.swing.GroupLayout zettel_panelLayout = new javax.swing.GroupLayout(zettel_panel);
         zettel_panel.setLayout(zettel_panelLayout);
         zettel_panelLayout.setHorizontalGroup(
             zettel_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(zettel_panelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(zettel_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4)
+                    .addComponent(jScrollPane5)
                     .addGroup(zettel_panelLayout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addComponent(lbl_graph_image_viewer, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, zettel_panelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(125, Short.MAX_VALUE))
+                        .addComponent(lblExplaTitle1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(zettel_panelLayout.createSequentialGroup()
+                .addComponent(lblExplaTitle2)
+                .addGap(0, 580, Short.MAX_VALUE))
         );
         zettel_panelLayout.setVerticalGroup(
             zettel_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(zettel_panelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbl_graph_image_viewer, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(62, 62, 62)
-                .addGroup(zettel_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(153, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addComponent(lblExplaTitle1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addComponent(lblExplaTitle2)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76))
         );
 
-        jTabbedPane.addTab("Graph View", zettel_panel);
+        jTabbedPane.addTab("Zettelkasten", zettel_panel);
 
         jLabel2.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         jLabel2.setText("이름");
@@ -1038,13 +1050,13 @@ public class MainFrame extends javax.swing.JFrame {
                                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(mypage_tf_tag, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)))
                         .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(mypage_btn_tag_add, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(mypage_btn_change)
                             .addComponent(mypage_btn_tag_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(58, 58, 58)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(101, Short.MAX_VALUE))
         );
         my_panelLayout.setVerticalGroup(
             my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1063,7 +1075,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(mypage_lb_createdat))
                         .addGap(18, 18, 18)
                         .addComponent(mypage_btn_user_update)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                         .addGroup(my_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
                             .addComponent(fontComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1354,10 +1366,6 @@ public class MainFrame extends javax.swing.JFrame {
         writeFrame.setVisible(true);
     }//GEN-LAST:event_btn_writeActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void password_check_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_password_check_btnActionPerformed
         if (
         password_check_tf.getText().trim().isEmpty() ) {
@@ -1465,12 +1473,10 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> backgroundColorComboBox;
     private javax.swing.JButton btn_write;
     private javax.swing.JComboBox<String> fontComboBox;
-    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JFileChooser jFileChooser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1482,6 +1488,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane;
     private javax.swing.JFrame joinFrame;
     private javax.swing.JLabel join_lbl_id;
@@ -1496,7 +1504,10 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField join_tf_pw2;
     private javax.swing.JLabel join_title;
     private javax.swing.JLabel join_title1;
-    private javax.swing.JLabel lbl_graph_image_viewer;
+    private javax.swing.JTextArea lblExpla1;
+    private javax.swing.JTextArea lblExpla2;
+    private javax.swing.JLabel lblExplaTitle1;
+    private javax.swing.JLabel lblExplaTitle2;
     private javax.swing.JFrame loginFrame;
     private javax.swing.JLabel login_lbl_captcha;
     private javax.swing.JLabel login_lbl_captcha_image;

@@ -720,7 +720,7 @@
                               </Group>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="229" pref="715" max="32767" attributes="0"/>
+                              <EmptySpace min="229" pref="841" max="32767" attributes="0"/>
                               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
@@ -743,7 +743,7 @@
                       <Component id="jScrollPane1" min="-2" pref="332" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btn_write" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="51" max="32767" attributes="0"/>
+                      <EmptySpace pref="56" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -804,8 +804,8 @@
         <Container class="javax.swing.JPanel" name="zettel_panel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Graph View">
-                <Property name="tabTitle" type="java.lang.String" value="Graph View"/>
+              <JTabbedPaneConstraints tabName="Zettelkasten">
+                <Property name="tabTitle" type="java.lang.String" value="Zettelkasten"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -814,70 +814,103 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPane4" max="32767" attributes="0"/>
+                          <Component id="jScrollPane5" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
-                              <Component id="lbl_graph_image_viewer" min="-2" pref="600" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel11" min="-2" pref="152" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton1" min="-2" pref="83" max="-2" attributes="0"/>
+                              <Component id="lblExplaTitle1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="125" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="lblExplaTitle2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="580" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lbl_graph_image_viewer" min="-2" pref="300" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel11" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                          <Component id="jButton1" alignment="3" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="153" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                      <Component id="lblExplaTitle1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jScrollPane4" min="-2" pref="232" max="-2" attributes="0"/>
+                      <EmptySpace pref="43" max="32767" attributes="0"/>
+                      <Component id="lblExplaTitle2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jScrollPane5" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="lbl_graph_image_viewer">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/final_graph_image.png"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="jButton1">
+            <Component class="javax.swing.JLabel" name="lblExplaTitle2">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="&#xd734;&#xba3c;&#xd3b8;&#xc9c0;&#xccb4;" size="24" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&#xd3b8;&#xc9d1;"/>
-                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[83, 35]"/>
-                </Property>
-                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[83, 35]"/>
-                </Property>
+                <Property name="text" type="java.lang.String" value="&#xc81c;&#xd154;&#xce74;&#xc2a4;&#xd150;(Zettelkasten)&#xc758; &#xc791;&#xc131;&#xbc95;"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
-              </Events>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel11">
+            <Container class="javax.swing.JScrollPane" name="jScrollPane4">
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTextArea" name="lblExpla1">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="d0" green="fd" red="ff" type="rgb"/>
+                    </Property>
+                    <Property name="columns" type="int" value="20"/>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="&#xd734;&#xba3c;&#xd3b8;&#xc9c0;&#xccb4;" size="18" style="0"/>
+                    </Property>
+                    <Property name="rows" type="int" value="5"/>
+                    <Property name="text" type="java.lang.String" value="&#xc81c;&#xd154;&#xce74;&#xc2a4;&#xd150;&#xc740; &#xb3c5;&#xc77c;&#xc5b4;&#xb85c; &quot;&#xba54;&#xbaa8;&#xc0c1;&#xc790;&quot;&#xb77c;&#xb294; &#xb73b;&#xc73c;&#xb85c;, &#xb2c8;&#xcf5c;&#xb77c;&#xc2a4; &#xb8e8;&#xb9cc;&#xc774; &#xace0;&#xc548;&#xd55c; &#xb3c5;&#xcc3d;&#xc801;&#xc778; &#xc815;&#xbcf4; &#xad00;&#xb9ac; &#xbc0f; &#xcc3d;&#xc758;&#xc801; &#xc0ac;&#xace0; &#xb3c4;&#xad6c;&#xc774;&#xb2e4;.&#xa;&#xadf8;&#xb294; &#xc544;&#xc774;&#xb514;&#xc5b4;&#xc640; &#xc9c0;&#xc2dd;&#xc744; &#xd6a8;&#xacfc;&#xc801;&#xc73c;&#xb85c; &#xc815;&#xb9ac;&#xd558;&#xace0; &#xc5f0;&#xacb0; &#xd574; 70&#xad8c; &#xc774;&#xc0c1;&#xc758; &#xc800;&#xc11c;&#xc640; 400&#xd3b8; &#xc774;&#xc0c1;&#xc758; &#xb17c;&#xbb38;&#xc744; &#xc9d1;&#xd544;&#xd558;&#xc600;&#xb2e4;.&#xa;&#xa;&#xc81c;&#xd154;&#xce74;&#xc2a4;&#xd150;&#xc740; &#xb2e8;&#xc21c;&#xd788; &#xc815;&#xbcf4;&#xb294; &#xc800;&#xc7a5;&#xd558;&#xb294; &#xac83;&#xc744; &#xb118;&#xc5b4;&#xc11c;, &#xc544;&#xc774;&#xb514;&#xc5b4; &#xac04;&#xc758; &#xad00;&#xacc4;&#xb97c; &#xad6c;&#xcd95;&#xd558;&#xb294;&#xb370; &#xc911;&#xc810;&#xc744; &#xb454;&#xb2e4;. &#xc11c;&#xb85c; &#xb2e4;&#xb978; &#xc544;&#xc774;&#xb514;&#xc5b4;&#xac00; &#xc5f0;&#xacb0;&#xb418;&#xa;&#xba70; &#xc0c8;&#xb85c;&#xc6b4; &#xd1b5;&#xcc30;&#xacfc; &#xcc3d;&#xc758;&#xc801;&#xc778; &#xbc1c;&#xc0c1;&#xc774; &#xac00;&#xb2a5;&#xd574;&#xc9c4;&#xb2e4;.&#xa;&#xb610;&#xd55c; &#xc5f0;&#xacb0;&#xb41c; &#xac01; &#xc544;&#xc774;&#xb514;&#xc5b4;&#xb4e4;&#xc774; &#xc11c;&#xb85c; &#xc870;&#xd569;&#xb418;&#xba70; &#xb300;&#xc8fc;&#xc81c;&#xc640; &#xc0c8;&#xb85c;&#xc6b4; &#xc544;&#xc774;&#xb514;&#xc5b4;&#xb97c; &#xb9cc;&#xb4e4; &#xc218; &#xc788;&#xb294; &#xc0c1;&#xd5a5;&#xc2dd; &#xad6c;&#xc870;&#xac00; &#xb300;&#xd45c;&#xc801;&#xc778; &#xd2b9;&#xc9d5;&#xc774;&#xb2e4;.&#xa;&#xa;&#xc774;&#xb97c; &#xc704;&#xd574; &#xb9c1;&#xd06c;&#xc640; &#xd0dc;&#xadf8; &#xc2dc;&#xc2a4;&#xd15c;&#xc744; &#xb3c4;&#xc785;&#xd558;&#xc5ec; &#xc544;&#xc774;&#xb514;&#xc5b4;&#xb97c; &#xc791;&#xc131;&#xd558;&#xace0;, &#xc774;&#xb97c; &#xc790;&#xc8fc; &#xc77d;&#xc73c;&#xba70; &#xc544;&#xc774;&#xb514;&#xc5b4; &#xb4f1;&#xc744; &#xc7ac;&#xc870;&#xc9c1;&#xd55c;&#xb2e4;."/>
+                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                      <Border info="null"/>
+                    </Property>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Component class="javax.swing.JLabel" name="lblExplaTitle1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="&#xd734;&#xba3c;&#xd3b8;&#xc9c0;&#xccb4;" size="24" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&#xb9c1;&#xd06c; &#xac1c;&#xc218; : 3&#xac1c;"/>
+                <Property name="text" type="java.lang.String" value="&#xc81c;&#xd154;&#xce74;&#xc2a4;&#xd150;(Zettelkasten) &#xc774;&#xb780;?"/>
               </Properties>
             </Component>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane5">
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTextArea" name="lblExpla2">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="d0" green="fd" red="ff" type="rgb"/>
+                    </Property>
+                    <Property name="columns" type="int" value="20"/>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="&#xd734;&#xba3c;&#xd3b8;&#xc9c0;&#xccb4;" size="18" style="0"/>
+                    </Property>
+                    <Property name="rows" type="int" value="5"/>
+                    <Property name="text" type="java.lang.String" value="1. &#xd558;&#xb098;&#xc758; &#xba54;&#xbaa8;&#xc5d0;&#xb294; &#xd558;&#xb098;&#xc758; &#xc544;&#xc774;&#xb514;&#xc5b4;&#xb9cc; &#xc791;&#xc131;&#xa;2. &#xc774;&#xd574;&#xd558;&#xae30; &#xc27d;&#xace0; &#xc9c1;&#xad00;&#xc801;&#xc778; &#xc5b8;&#xc5b4;&#xb85c; &#xc791;&#xc131;&#xa;3. &#xc11c;&#xb85c; &#xc5f0;&#xad00;&#xb41c; &#xb2e4;&#xb978; &#xc544;&#xc774;&#xb514;&#xc5b4;&#xc640;&#xc758; &#xb9c1;&#xd06c;&#xb97c; &#xc0dd;&#xc131;&#xd558;&#xace0; &#xbb38;&#xc11c;&#xb97c; &#xbd84;&#xb958;&#xd560; &#xc218; &#xc788;&#xb294; &#xd0dc;&#xadf8;&#xb97c; &#xc124;&#xc815;&#xa;4. &#xc8fc;&#xae30;&#xc801;&#xc73c;&#xb85c; &#xc544;&#xc774;&#xb514;&#xc5b4;&#xb97c; &#xc77d;&#xc73c;&#xba70;, &#xb9c1;&#xd06c;&#xb97c; &#xd0c0;&#xace0; &#xae00;&#xc744; &#xc77d;&#xc73c;&#xba74;&#xc11c; &#xc544;&#xc774;&#xb514;&#xc5b4;&#xb97c; &#xc7ac;&#xc870;&#xc9c1;&#xd55c;&#xb2e4;."/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="my_panel">
@@ -956,7 +989,7 @@
                                               <Component id="mypage_tf_tag" min="-2" pref="134" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace pref="15" max="32767" attributes="0"/>
+                                      <EmptySpace pref="79" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -967,7 +1000,7 @@
                               <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="39" max="32767" attributes="0"/>
+                      <EmptySpace pref="101" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -990,7 +1023,7 @@
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="mypage_btn_user_update" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="43" max="32767" attributes="0"/>
+                              <EmptySpace pref="48" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="fontComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
