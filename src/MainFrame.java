@@ -908,14 +908,14 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(lblExplaTitle1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addComponent(lblExplaTitle2)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(76, 76, 76))
         );
 
-        jTabbedPane.addTab("Zettelkasten", zettel_panel);
+        jTabbedPane.addTab("Graph View", zettel_panel);
 
         jLabel2.setFont(new java.awt.Font("휴먼편지체", 0, 18)); // NOI18N
         jLabel2.setText("이름");
